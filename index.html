@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Input Nilai Rapor Marhalah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .sidebar-item-active { background-color: #eff6ff; color: #2563eb; border-right: 4px solid #2563eb; }
+        .loading-overlay { background: rgba(255, 255, 255, 0.8); display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; flex-direction: column; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <div id="loading" class="loading-overlay">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+        <p id="loading-text" class="text-blue-600 font-semibold text-center">Sedang memproses...</p>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform -translate-x-full md:translate-x-0 md:static flex flex-col h-screen shrink-0">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold text-blue-600 flex items-center gap-2">
+                <i data-lucide="graduation-cap" class="w-8 h-8"></i> SIM Rapor
+            </h1>
+        </div>
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <button onclick="switchTab('mi')" id="side-mi" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg sidebar-item-active transition-all">
+                <i data-lucide="book-marked" class="w-5 h-5"></i> Nilai Ibtidaiyah
+            </button>
+            <button onclick="switchTab('mt')" id="side-mt" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 transition-all">
+                <i data-lucide="book-copy" class="w-5 h-5"></i> Nilai Mutawassithoh
+            </button>
+        </nav>
+    </aside>
+
+    <main class="flex-1 h-screen overflow-y-auto">
+        <div class="max-w-5xl mx-auto p-4 md:p-10">
+            <div class="mb-8">
+                <h2 id="current-title" class="text-3xl font-bold text-slate-800">Form Input Ibtidaiyah</h2>
+                <p class="text-slate-500 font-medium italic">Urutan: Identitas (7 Kolom) → Akademik → Sikap → Absensi → Catatan</p>
+            </div>
+
+            <form id="raporForm" class="space-y-8">
+                <input type="hidden" id="inputMarhalah" name="marhalah" value="mi">
+                
+                <!-- Identitas -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+                    <div class="flex items-center gap-2 text-blue-600 font-bold border-b pb-4">
+                        <i data-lucide="user-circle" class="w-5 h-5"></i> IDENTITAS SANTRI
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Nama Lengkap</label>
+                            <select id="namaSantri" name="nama" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">-- Pilih Nama --</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">NIS</label>
+                            <select id="nisSantri" name="nis" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none">
+                                <option value="">-- Pilih NIS --</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Kelas</label>
+                            <select id="inputKelas" name="kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none">
+                                <option value="">-- Pilih Kelas --</option>
+                            </select>
+                        </div>
+                        <!-- Semester -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Semester</label>
+                            <select name="semester" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">-- Pilih Semester --</option>
+                                <option value="1 (Satu)/Ganjil">1 (Satu)/Ganjil</option>
+                                <option value="2 (Dua)/Genap">2 (Dua)/Genap</option>
+                            </select>
+                        </div>
+                        <!-- Tahun Pelajaran -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Tahun Pelajaran</label>
+                            <select name="tahun_pelajaran" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">-- Pilih Tahun --</option>
+                                <option value="1446 - 1447 H / 2025 - 2026 M">1446 - 1447 H / 2025 - 2026 M</option>
+                                <option value="1447 - 1448 H / 2026 - 2027 M">1447 - 1448 H / 2026 - 2027 M</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Wali Kelas</label>
+                            <select id="waliKelas" name="wali_kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none">
+                                <option value="">-- Pilih Wali Kelas --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Akademik -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-blue-600 px-6 py-4 text-white font-bold flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-5 h-5"></i> NILAI AKADEMIK
+                    </div>
+                    <div id="grid-akademik" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                </div>
+
+                <!-- Sikap -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-amber-500 px-6 py-4 text-white font-bold flex items-center gap-2">
+                        <i data-lucide="award" class="w-5 h-5"></i> NILAI SIKAP (PREDIKAT TEKS)
+                    </div>
+                    <div id="grid-sikap" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                </div>
+
+                <!-- Absensi -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-rose-500 px-6 py-4 text-white font-bold flex items-center gap-2">
+                        <i data-lucide="user-check" class="w-5 h-5"></i> KEHADIRAN
+                    </div>
+                    <div id="grid-absen" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                </div>
+
+                <!-- Catatan -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                    <div class="flex items-center gap-2 text-slate-700 font-bold border-b pb-4">
+                        <i data-lucide="message-square" class="w-5 h-5"></i> CATATAN WALI KELAS
+                    </div>
+                    <textarea name="catatan" rows="4" placeholder="Tulis catatan..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="pb-20">
+                    <button type="submit" class="w-full md:w-auto px-12 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center gap-3">
+                        <i data-lucide="save" class="w-6 h-6"></i> SIMPAN DATA
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7anL_uWAK9Oh1pKlQwvJQZdG05tWamSFfz6NzCKtRQMsujlUi40YHbDiBOidOgdRKNw/exec";
+        let currentTab = 'mi';
+        let santriData = [];
+
+        const mapelMI = ["Al-Qira'ah/At-Tajwid", "Hifzh Al-Qur'an", "Tahsin Al-Hifzh", "Akidah", "Akhlak", "Fikih", "Bahasa Arab", "Sirah", "Khath", "Doa", "Bahasa Indonesia", "Matematika", "IPA", "IPS", "Olahraga/Keterampilan"];
+        const sikapMI = ["Perilaku", "Kerapian", "Kedisiplinan"];
+        const absenMI = ["Sakit", "Izin", "Tanpa Keterangan"];
+
+        const mapelMT = ["Hifdhul Qur’an", "Bahasa Arab", "Bahasa Indonesia", "Tafsir", "Tajwid", "Aqidah", "Hadits", "Fiqih", "Sirah", "Matematika", "Khot"];
+        const sikapMT = ["Kebersihan", "Kerapian", "Adab"];
+        const absenMT = ["Sakit", "Izin", "Tanpa Keterangan"];
+
+        function renderFields() {
+            const isMI = currentTab === 'mi';
+            const mapels = isMI ? mapelMI : mapelMT;
+            const sikaps = isMI ? sikapMI : sikapMT;
+            const absens = isMI ? absenMI : absenMT;
+
+            document.getElementById('grid-akademik').innerHTML = mapels.map(m => `
+                <div class="space-y-1 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase">${m}</label>
+                    <input type="number" name="akad_${m}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-blue-700 outline-none">
+                </div>
+            `).join('');
+
+            document.getElementById('grid-sikap').innerHTML = sikaps.map(s => `
+                <div class="space-y-1 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                    <label class="text-[10px] font-bold text-amber-700 uppercase">${s}</label>
+                    <input type="text" name="sikap_${s}" placeholder="Predikat..." class="w-full border rounded-lg p-2 font-bold text-amber-700 outline-none">
+                </div>
+            `).join('');
+
+            document.getElementById('grid-absen').innerHTML = absens.map(a => `
+                <div class="space-y-1 p-3 bg-rose-50 rounded-xl border border-rose-100">
+                    <label class="text-[10px] font-bold text-rose-700 uppercase">${a}</label>
+                    <input type="number" name="absen_${a}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-rose-600 outline-none">
+                </div>
+            `).join('');
+        }
+
+        async function fetchSantriData() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=getSantriData&marhalah=${currentTab}`);
+                santriData = await response.json();
+                populateDropdowns();
+            } catch (e) { console.error(e); } finally { loading.style.display = 'none'; }
+        }
+
+        function populateDropdowns() {
+            const selects = {
+                nama: document.getElementById('namaSantri'),
+                nis: document.getElementById('nisSantri'),
+                kelas: document.getElementById('inputKelas'),
+                wali: document.getElementById('waliKelas')
+            };
+            Object.values(selects).forEach(s => s.innerHTML = `<option value="">-- Pilih --</option>`);
+            const unique = {
+                nama: [...new Set(santriData.map(s => s.nama))].sort(),
+                nis: [...new Set(santriData.map(s => s.nis))].sort(),
+                kelas: [...new Set(santriData.map(s => s.kelas))].sort(),
+                wali: [...new Set(santriData.map(s => s.wali))].sort()
+            };
+            unique.nama.forEach(v => selects.nama.innerHTML += `<option value="${v}">${v}</option>`);
+            unique.nis.forEach(v => selects.nis.innerHTML += `<option value="${v}">${v}</option>`);
+            unique.kelas.forEach(v => selects.kelas.innerHTML += `<option value="${v}">${v}</option>`);
+            unique.wali.forEach(v => selects.wali.innerHTML += `<option value="${v}">${v}</option>`);
+
+            selects.nama.onchange = (e) => {
+                const match = santriData.find(s => s.nama === e.target.value);
+                if (match) {
+                    selects.nis.value = match.nis;
+                    selects.kelas.value = match.kelas;
+                    selects.wali.value = match.wali;
+                }
+            };
+        }
+
+        document.getElementById('raporForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            document.getElementById('loading-text').innerText = "Sedang Mengirim...";
+
+            const form = e.target;
+            const marhalah = form.marhalah.value;
+            const isMI = marhalah === 'mi';
+            
+            // Konstruski Payload Bersih (Urutan diperbarui dengan Semester & Tahun Pelajaran)
+            const payload = [
+                new Date().toLocaleString('id-ID'), // [0] Timestamp
+                form.nama.value,                    // [1] Nama
+                form.nis.value,                     // [2] NIS
+                form.kelas.value,                   // [3] Kelas
+                form.semester.value,                // [4] Semester (Baru)
+                form.tahun_pelajaran.value,         // [5] Tahun Pelajaran (Baru)
+                form.wali_kelas.value               // [6] Wali
+            ];
+
+            const maps = isMI ? mapelMI : mapelMT;
+            maps.forEach(m => payload.push(form[`akad_${m}`].value || 0));
+
+            const siks = isMI ? sikapMI : sikapMT;
+            siks.forEach(s => payload.push(form[`sikap_${s}`].value || "-"));
+
+            const abss = isMI ? absenMI : absenMT;
+            abss.forEach(a => payload.push(form[`absen_${a}`].value || 0));
+
+            payload.push(form.catatan.value || "-");
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        marhalah: marhalah, 
+                        rowData: payload 
+                    })
+                });
+                alert("Berhasil disimpan!");
+                form.reset();
+                populateDropdowns();
+            } catch (error) {
+                alert("Error: " + error.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        async function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('side-mi').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mi' ? 'sidebar-item-active' : 'text-gray-600'}`;
+            document.getElementById('side-mt').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mt' ? 'sidebar-item-active' : 'text-gray-600'}`;
+            document.getElementById('inputMarhalah').value = tab;
+            document.getElementById('current-title').textContent = "Form Input " + (tab === 'mi' ? "Ibtidaiyah" : "Mutawassithoh");
+            renderFields();
+            await fetchSantriData();
+        }
+
+        window.onload = () => {
+            renderFields();
+            fetchSantriData();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
