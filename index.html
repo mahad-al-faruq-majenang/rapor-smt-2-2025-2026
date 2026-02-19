@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Input Nilai Rapor Marhalah</title>
+    <title>Sistem Input Nilai Rapor Ma'had Al Faruq Majenang</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -39,21 +39,14 @@
             backdrop-filter: blur(4px);
         }
         
-        /* Sidebar & Main Content Transition Logic */
-        #sidebar { 
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        #main-content { 
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
+        #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #main-content { transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Desktop states */
         @media (min-width: 768px) {
             .sidebar-collapsed { transform: translateX(-100%); }
             .main-expanded { margin-left: 0 !important; }
         }
 
-        /* Mobile states */
         @media (max-width: 767px) {
             #sidebar { transform: translateX(-100%); }
             #sidebar.mobile-open { transform: translateX(0); }
@@ -82,7 +75,7 @@
         </button>
     </div>
 
-    <!-- Sidebar Overlay (Mobile Only) -->
+    <!-- Sidebar Overlay -->
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-indigo-950/60 backdrop-blur-sm z-40 hidden"></div>
 
     <!-- Sidebar -->
@@ -130,7 +123,6 @@
 
     <!-- Main Content -->
     <main id="main-content" class="md:ml-72 min-h-screen transition-all duration-300">
-        <!-- Desktop Floating Toggle (Shown only when sidebar is closed) -->
         <button id="desktop-toggle" onclick="toggleSidebar()" class="hidden fixed top-6 left-6 z-[60] p-3 sidebar-indigo border border-white/10 shadow-xl rounded-xl text-white hover:scale-110 transition-all active:scale-95">
             <i data-lucide="menu"></i>
         </button>
@@ -141,93 +133,97 @@
                     <span class="w-2 h-10 bg-indigo-600 rounded-full"></span>
                     FORM INPUT NILAI RAPOR MARHALAH IBTIDAIYAH
                 </h2>
-                <p class="text-slate-500 font-medium italic mt-2 text-sm">Pastikan data santri sudah dipilih dari dropdown sebelum memasukkan nilai.</p>
+                <p class="text-slate-500 font-medium italic mt-2 text-sm">Input nilai akademik kini tersusun secara horizontal untuk efisiensi halaman.</p>
             </div>
 
             <form id="raporForm" class="space-y-8">
-                <!-- Data Identitas (Wajib) -->
+                <!-- Data Identitas -->
                 <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 space-y-6 relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-2 h-full bg-indigo-600"></div>
                     <div class="flex items-center gap-3 text-slate-800 font-bold border-b border-slate-100 pb-5">
                         <i data-lucide="user-circle" class="w-6 h-6 text-indigo-600"></i> 
-                        <span class="tracking-tight uppercase text-sm">Identitas Santri</span>
+                        <span class="tracking-tight uppercase text-sm text-indigo-900">Identitas Santri</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Lengkap</label>
-                            <select id="namaSantri" name="nama" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Nama Lengkap</label>
+                            <select id="namaSantri" name="nama" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-semibold text-slate-700">
                                 <option value="">-- Pilih Nama --</option>
                             </select>
                         </div>
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">NIS</label>
-                            <select id="nisSantri" name="nis" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none font-medium text-slate-700">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">NIS</label>
+                            <select id="nisSantri" name="nis" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none font-semibold text-slate-700">
                                 <option value="">-- Pilih NIS --</option>
                             </select>
                         </div>
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Kelas</label>
-                            <select id="inputKelas" name="kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none font-medium text-slate-700">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Kelas</label>
+                            <select id="inputKelas" name="kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none font-semibold text-slate-700">
                                 <option value="">-- Pilih Kelas --</option>
                             </select>
                         </div>
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Semester</label>
-                            <select name="semester" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Semester</label>
+                            <select name="semester" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-semibold text-slate-700">
                                 <option value="">-- Pilih Semester --</option>
                                 <option value="1 (Satu)/Ganjil">1 (Satu)/Ganjil</option>
                                 <option value="2 (Dua)/Genap">2 (Dua)/Genap</option>
                             </select>
                         </div>
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Tahun Pelajaran</label>
-                            <select name="tahun_pelajaran" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Tahun Pelajaran</label>
+                            <select name="tahun_pelajaran" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-semibold text-slate-700">
                                 <option value="">-- Pilih Tahun --</option>
                                 <option value="1446 - 1447 H / 2025 - 2026 M">1446 - 1447 H / 2025 - 2026 M</option>
                                 <option value="1447 - 1448 H / 2026 - 2027 M">1447 - 1448 H / 2026 - 2027 M</option>
                             </select>
                         </div>
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Wali Kelas</label>
-                            <select id="waliKelas" name="wali_kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none font-medium text-slate-700">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">Wali Kelas</label>
+                            <select id="waliKelas" name="wali_kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none font-semibold text-slate-700">
                                 <option value="">-- Pilih Wali Kelas --</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- Nilai Akademik -->
+                <!-- Nilai Akademik (Tata Letak Baris) -->
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="bg-indigo-600 px-8 py-5 text-white font-bold flex items-center gap-3">
                         <i data-lucide="book-open" class="w-6 h-6"></i> 
                         <span class="tracking-tight uppercase text-sm">Nilai Akademik</span>
                     </div>
-                    <div id="grid-akademik" class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    <div id="grid-akademik" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-2">
+                        <!-- Mapel akan dimuat di sini -->
+                    </div>
                 </div>
 
-                <!-- Nilai Sikap -->
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-amber-500 px-8 py-5 text-white font-bold flex items-center gap-3">
-                        <i data-lucide="award" class="w-6 h-6"></i> 
-                        <span class="tracking-tight uppercase text-sm">Nilai Sikap</span>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Nilai Sikap -->
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-amber-500 px-8 py-4 text-white font-bold flex items-center gap-3">
+                            <i data-lucide="award" class="w-5 h-5"></i> 
+                            <span class="tracking-tight uppercase text-xs">Nilai Sikap</span>
+                        </div>
+                        <div id="grid-sikap" class="p-6 space-y-4"></div>
                     </div>
-                    <div id="grid-sikap" class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                </div>
 
-                <!-- Absensi -->
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-rose-500 px-8 py-5 text-white font-bold flex items-center gap-3">
-                        <i data-lucide="user-check" class="w-6 h-6"></i> 
-                        <span class="tracking-tight uppercase text-sm">Kehadiran</span>
+                    <!-- Absensi -->
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-rose-500 px-8 py-4 text-white font-bold flex items-center gap-3">
+                            <i data-lucide="user-check" class="w-5 h-5"></i> 
+                            <span class="tracking-tight uppercase text-xs">Kehadiran</span>
+                        </div>
+                        <div id="grid-absen" class="p-6 space-y-4"></div>
                     </div>
-                    <div id="grid-absen" class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <!-- Catatan -->
                 <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 space-y-4">
                     <div class="flex items-center gap-3 text-slate-800 font-bold border-b border-slate-100 pb-5">
-                        <i data-lucide="message-square" class="w-6 h-6 text-slate-400"></i> 
-                        <span class="tracking-tight uppercase text-sm">Catatan Wali Kelas</span>
+                        <i data-lucide="message-square" class="w-6 h-6 text-indigo-300"></i> 
+                        <span class="tracking-tight uppercase text-sm text-indigo-900">Catatan Wali Kelas</span>
                     </div>
                     <textarea name="catatan" id="catatanWali" rows="4" placeholder="Tulis catatan perkembangan santri di sini..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700"></textarea>
                 </div>
@@ -242,7 +238,6 @@
     </main>
 
     <script>
-        // MASUKKAN URL WEB APP GOOGLE SCRIPT ANDA DI SINI
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7anL_uWAK9Oh1pKlQwvJQZdG05tWamSFfz6NzCKtRQMsujlUi40YHbDiBOidOgdRKNw/exec";
         
         let currentTab = 'mi';
@@ -280,24 +275,27 @@
         function renderFields() {
             const current = config[currentTab];
 
+            // Render Akademik - Format Baris (Horizontal)
             document.getElementById('grid-akademik').innerHTML = current.mapel.map(m => `
-                <div class="group space-y-2 p-5 bg-slate-50 rounded-2xl border border-slate-100 transition-all hover:bg-white hover:shadow-md hover:border-indigo-200">
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block group-hover:text-indigo-600">${m}</label>
-                    <input type="number" name="${m}" placeholder="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-extrabold text-indigo-700 outline-none focus:ring-2 focus:ring-indigo-400 text-lg">
+                <div class="flex items-center justify-between gap-4 py-2 border-b border-slate-50 group">
+                    <label class="text-xs font-semibold text-slate-600 group-hover:text-indigo-600 transition-colors uppercase tracking-tight truncate w-2/3">${m}</label>
+                    <input type="number" name="${m}" placeholder="0" class="w-20 bg-slate-50 border border-slate-200 rounded-lg p-2 text-center font-bold text-indigo-700 outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition-all">
                 </div>
             `).join('');
 
+            // Render Sikap - Format Baris
             document.getElementById('grid-sikap').innerHTML = current.sikap.map(s => `
-                <div class="group space-y-2 p-5 bg-amber-50 rounded-2xl border border-amber-100 transition-all hover:bg-white hover:shadow-md hover:border-amber-200">
-                    <label class="text-[11px] font-bold text-amber-700 uppercase tracking-wider block group-hover:text-amber-600">${s}</label>
-                    <input type="text" name="sikap_${s}" placeholder="Predikat..." class="w-full bg-white border border-amber-200 rounded-xl p-3 font-extrabold text-amber-700 outline-none focus:ring-2 focus:ring-amber-400">
+                <div class="flex items-center justify-between gap-4 group">
+                    <label class="text-[11px] font-bold text-amber-700 uppercase tracking-tight">${s}</label>
+                    <input type="text" name="sikap_${s}" placeholder="..." class="w-32 bg-amber-50/50 border border-amber-100 rounded-lg p-2 font-bold text-amber-800 text-center outline-none focus:ring-2 focus:ring-amber-400 focus:bg-white transition-all">
                 </div>
             `).join('');
 
+            // Render Absensi - Format Baris
             document.getElementById('grid-absen').innerHTML = current.absen.map(a => `
-                <div class="group space-y-2 p-5 bg-rose-50 rounded-2xl border border-rose-100 transition-all hover:bg-white hover:shadow-md hover:border-rose-200">
-                    <label class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block group-hover:text-rose-600">${a}</label>
-                    <input type="number" name="absen_${a}" placeholder="0" class="w-full bg-white border border-rose-200 rounded-xl p-3 font-extrabold text-rose-600 outline-none focus:ring-2 focus:ring-rose-400 text-lg">
+                <div class="flex items-center justify-between gap-4 group">
+                    <label class="text-[11px] font-bold text-rose-700 uppercase tracking-tight">${a}</label>
+                    <input type="number" name="absen_${a}" placeholder="0" class="w-20 bg-rose-50/50 border border-rose-100 rounded-lg p-2 font-bold text-rose-800 text-center outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all">
                 </div>
             `).join('');
         }
@@ -311,7 +309,7 @@
                 populateDropdowns();
             } catch (e) { 
                 console.error("Fetch error:", e);
-                alert("Gagal memuat data santri. Periksa URL GAS atau koneksi internet.");
+                alert("Gagal memuat data santri.");
             } finally { 
                 loading.style.display = 'none'; 
             }
@@ -356,8 +354,6 @@
             document.getElementById('loading-text').innerText = "Sedang Mengirim Data...";
 
             const form = e.target;
-            
-            // Susun data dasar terlebih dahulu
             const payload = {
                 marhalah: currentTab,
                 nama: form.nama.value,
@@ -368,15 +364,13 @@
                 wali_kelas: form.wali_kelas.value
             };
 
-            // Masukkan nilai akademik, sikap, dan absen secara berurutan
             const inputs = form.querySelectorAll('input[name]');
             inputs.forEach(input => {
-                if(input.name !== 'marhalah' && input.name !== 'nama' && input.name !== 'nis' && input.name !== 'kelas' && input.name !== 'semester' && input.name !== 'tahun_pelajaran' && input.name !== 'wali_kelas') {
+                if(!payload[input.name]) {
                     payload[input.name] = input.value || (input.type === 'number' ? 0 : "-");
                 }
             });
 
-            // Masukkan catatan TERAKHIR agar kolomnya berada di paling kanan
             payload.catatan = document.getElementById('catatanWali').value || "-";
 
             try {
@@ -386,7 +380,7 @@
                     body: JSON.stringify(payload)
                 });
                 
-                alert("Alhamdulillah, data berhasil dikirim ke spreadsheet.");
+                alert("Alhamdulillah, data berhasil disimpan.");
                 form.reset();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (error) {
