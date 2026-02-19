@@ -9,132 +9,170 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .sidebar-item-active { background-color: #eff6ff; color: #2563eb; border-right: 4px solid #2563eb; }
+        
+        /* Modern Indigo Sidebar Styles */
+        .sidebar-indigo {
+            background: linear-gradient(180deg, #312e81 0%, #1e1b4b 100%);
+        }
+        
+        .sidebar-item-active { 
+            background: rgba(255, 255, 255, 0.15);
+            color: white; 
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-item-hover:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
         .loading-overlay { background: rgba(255, 255, 255, 0.8); display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; flex-direction: column; }
         
         /* Sidebar transition */
         #sidebar { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .sidebar-collapsed { width: 0 !important; transform: translateX(-100%); overflow: hidden; }
         .main-expanded { margin-left: 0 !important; }
+
+        /* Custom Scrollbar */
+        #sidebar nav::-webkit-scrollbar { width: 4px; }
+        #sidebar nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col md:flex-row overflow-hidden">
 
     <!-- Loading State -->
     <div id="loading" class="loading-overlay">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-        <p id="loading-text" class="text-blue-600 font-semibold text-center">Sedang memproses...</p>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
+        <p id="loading-text" class="text-indigo-600 font-semibold text-center">Sedang memproses...</p>
     </div>
 
     <!-- Mobile Header -->
-    <div class="md:hidden bg-white border-b px-4 py-3 flex justify-between items-center sticky top-0 z-50">
-        <h1 class="font-bold text-blue-600 text-lg flex items-center gap-2">
-            <i data-lucide="graduation-cap" class="w-6 h-6"></i> SIM Rapor
+    <div class="md:hidden sidebar-indigo border-b border-white/10 px-4 py-3 flex justify-between items-center sticky top-0 z-50">
+        <h1 class="font-bold text-white text-lg flex items-center gap-2">
+            <i data-lucide="graduation-cap" class="w-6 h-6 text-indigo-300"></i> SIM Rapor
         </h1>
-        <button onclick="toggleSidebar()" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+        <button onclick="toggleSidebar()" class="p-2 text-white hover:bg-white/10 rounded-lg transition-colors">
             <i data-lucide="menu"></i>
         </button>
     </div>
 
     <!-- Sidebar Overlay (Mobile) -->
-    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-indigo-950/40 backdrop-blur-sm z-40 hidden md:hidden"></div>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r flex flex-col h-screen shrink-0 shadow-xl md:shadow-none">
-        <div class="p-6 flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-blue-600 flex items-center gap-2">
-                <i data-lucide="graduation-cap" class="w-8 h-8"></i> SIM Rapor
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 sidebar-indigo flex flex-col h-screen shrink-0 shadow-2xl md:shadow-none border-r border-white/10">
+        <div class="p-8 flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-white flex items-center gap-3">
+                <div class="bg-indigo-500 p-2 rounded-xl shadow-lg shadow-indigo-500/30">
+                    <i data-lucide="graduation-cap" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="tracking-tight">SIM Rapor</span>
             </h1>
-            <button onclick="toggleSidebar()" class="hidden md:block p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg">
+            <button onclick="toggleSidebar()" class="hidden md:block p-1.5 text-indigo-300 hover:text-white hover:bg-white/10 rounded-lg transition-all">
                 <i data-lucide="chevron-left"></i>
             </button>
         </div>
         
-        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-            <div class="pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider pl-2">Navigasi Utama</div>
+        <nav class="flex-1 px-4 space-y-1.5 overflow-y-auto">
+            <div class="pb-3 text-[11px] font-bold text-indigo-300/50 uppercase tracking-[0.2em] pl-4">Navigasi Utama</div>
             
-            <button onclick="switchTab('mi')" id="side-mi" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg sidebar-item-active transition-all">
-                <i data-lucide="book-marked" class="w-5 h-5"></i> Nilai Ibtidaiyah
+            <button onclick="switchTab('mi')" id="side-mi" class="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium rounded-xl sidebar-item-active transition-all group">
+                <i data-lucide="book-marked" class="w-5 h-5 opacity-90 group-hover:scale-110 transition-transform"></i> 
+                <span>Nilai Ibtidaiyah</span>
             </button>
             
-            <button onclick="switchTab('mt')" id="side-mt" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 transition-all">
-                <i data-lucide="book-copy" class="w-5 h-5"></i> Nilai Mutawassithoh
+            <button onclick="switchTab('mt')" id="side-mt" class="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium rounded-xl text-indigo-100/70 sidebar-item-hover transition-all group">
+                <i data-lucide="book-copy" class="w-5 h-5 opacity-70 group-hover:scale-110 transition-transform"></i> 
+                <span>Nilai Mutawassithoh</span>
             </button>
 
-            <div class="pt-6 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider pl-2">Eksternal</div>
+            <div class="pt-8 pb-3 text-[11px] font-bold text-indigo-300/50 uppercase tracking-[0.2em] pl-4">Eksternal</div>
             
-            <a href="https://mahad-al-faruq-majenang.github.io/data-santri/" target="_blank" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100">
-                <i data-lucide="users" class="w-5 h-5"></i> Data Santri
-                <i data-lucide="external-link" class="w-4 h-4 ml-auto opacity-50"></i>
+            <a href="https://mahad-al-faruq-majenang.github.io/data-santri/" target="_blank" class="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium rounded-xl text-indigo-100/70 sidebar-item-hover transition-all group border border-transparent">
+                <i data-lucide="users" class="w-5 h-5 opacity-70 group-hover:scale-110 transition-transform"></i> 
+                <span>Data Santri</span>
+                <i data-lucide="external-link" class="w-4 h-4 ml-auto opacity-30"></i>
             </a>
         </nav>
 
-        <div class="p-4 border-t bg-slate-50">
-            <p class="text-[10px] text-gray-400 text-center">SIM Rapor v2.1 &copy; 2026</p>
+        <div class="p-6 border-t border-white/10 bg-black/20">
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                <p class="text-[10px] text-indigo-300/60 font-medium mb-1 tracking-wider uppercase">Koneksi Database</p>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)] animate-pulse"></div>
+                    <span class="text-xs text-indigo-50 font-semibold tracking-wide">Terhubung</span>
+                </div>
+            </div>
+            <p class="text-[10px] text-indigo-300/40 mt-4 text-center tracking-[0.2em] uppercase font-bold">SIM Rapor v2.3</p>
         </div>
     </aside>
 
     <!-- Main Content -->
     <main id="main-content" class="flex-1 h-screen overflow-y-auto transition-all duration-300">
-        <!-- Desktop Toggle (Hidden when sidebar is visible) -->
-        <button id="desktop-toggle" onclick="toggleSidebar()" class="hidden fixed top-6 left-6 z-40 p-3 bg-white border shadow-md rounded-xl text-blue-600 hover:bg-blue-50 transition-all">
+        <!-- Desktop Toggle -->
+        <button id="desktop-toggle" onclick="toggleSidebar()" class="hidden fixed top-6 left-6 z-40 p-3 sidebar-indigo border border-white/10 shadow-xl rounded-xl text-white hover:opacity-90 transition-all active:scale-95">
             <i data-lucide="menu"></i>
         </button>
 
         <div class="max-w-5xl mx-auto p-4 md:p-10">
-            <div class="mb-8">
-                <h2 id="current-title" class="text-3xl font-bold text-slate-800">Form Input Ibtidaiyah</h2>
-                <p class="text-slate-500 font-medium italic">Urutan: Identitas (7 Kolom) → Akademik → Sikap → Absensi → Catatan</p>
+            <div class="mb-10">
+                <h2 id="current-title" class="text-xl font-extrabold text-indigo-700 uppercase tracking-widest flex items-center gap-3">
+                    <span class="w-8 h-1 bg-indigo-600 rounded-full"></span>
+                    FORM INPUT NILAI RAPOR MARHALAH IBTIDAIYAH
+                </h2>
+                <p class="text-slate-400 font-medium italic mt-2 text-sm pl-11">Urutan: Identitas (7 Kolom) → Akademik → Sikap → Absensi → Catatan</p>
             </div>
 
             <form id="raporForm" class="space-y-8">
                 <input type="hidden" id="inputMarhalah" name="marhalah" value="mi">
                 
                 <!-- Identitas -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
-                    <div class="flex items-center gap-2 text-blue-600 font-bold border-b pb-4">
-                        <i data-lucide="user-circle" class="w-5 h-5"></i> IDENTITAS SANTRI
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 space-y-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-indigo-600"></div>
+                    <div class="flex items-center gap-3 text-slate-800 font-bold border-b border-slate-100 pb-5">
+                        <i data-lucide="user-circle" class="w-6 h-6 text-indigo-600"></i> 
+                        <span class="tracking-tight uppercase text-sm">Identitas Santri</span>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-slate-700">Nama Lengkap</label>
-                            <select id="namaSantri" name="nama" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Lengkap</label>
+                            <select id="namaSantri" name="nama" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
                                 <option value="">-- Pilih Nama --</option>
                             </select>
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-slate-700">NIS</label>
-                            <select id="nisSantri" name="nis" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">NIS</label>
+                            <select id="nisSantri" name="nis" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none font-medium text-slate-700">
                                 <option value="">-- Pilih NIS --</option>
                             </select>
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-slate-700">Kelas</label>
-                            <select id="inputKelas" name="kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Kelas</label>
+                            <select id="inputKelas" name="kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none font-medium text-slate-700">
                                 <option value="">-- Pilih Kelas --</option>
                             </select>
                         </div>
-                        <!-- Semester -->
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-slate-700">Semester</label>
-                            <select name="semester" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Semester</label>
+                            <select name="semester" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
                                 <option value="">-- Pilih Semester --</option>
                                 <option value="1 (Satu)/Ganjil">1 (Satu)/Ganjil</option>
                                 <option value="2 (Dua)/Genap">2 (Dua)/Genap</option>
                             </select>
                         </div>
-                        <!-- Tahun Pelajaran -->
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-slate-700">Tahun Pelajaran</label>
-                            <select name="tahun_pelajaran" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Tahun Pelajaran</label>
+                            <select name="tahun_pelajaran" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
                                 <option value="">-- Pilih Tahun --</option>
                                 <option value="1446 - 1447 H / 2025 - 2026 M">1446 - 1447 H / 2025 - 2026 M</option>
                                 <option value="1447 - 1448 H / 2026 - 2027 M">1447 - 1448 H / 2026 - 2027 M</option>
                             </select>
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-slate-700">Wali Kelas</label>
-                            <select id="waliKelas" name="wali_kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Wali Kelas</label>
+                            <select id="waliKelas" name="wali_kelas" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 outline-none font-medium text-slate-700">
                                 <option value="">-- Pilih Wali Kelas --</option>
                             </select>
                         </div>
@@ -142,40 +180,44 @@
                 </div>
 
                 <!-- Akademik -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-blue-600 px-6 py-4 text-white font-bold flex items-center gap-2">
-                        <i data-lucide="book-open" class="w-5 h-5"></i> NILAI AKADEMIK
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-indigo-600 px-8 py-5 text-white font-bold flex items-center gap-3">
+                        <i data-lucide="book-open" class="w-6 h-6"></i> 
+                        <span class="tracking-tight uppercase text-sm">Nilai Akademik</span>
                     </div>
-                    <div id="grid-akademik" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                    <div id="grid-akademik" class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <!-- Sikap -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-amber-500 px-6 py-4 text-white font-bold flex items-center gap-2">
-                        <i data-lucide="award" class="w-5 h-5"></i> NILAI SIKAP (PREDIKAT TEKS)
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-amber-500 px-8 py-5 text-white font-bold flex items-center gap-3">
+                        <i data-lucide="award" class="w-6 h-6"></i> 
+                        <span class="tracking-tight uppercase text-sm">Nilai Sikap</span>
                     </div>
-                    <div id="grid-sikap" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                    <div id="grid-sikap" class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <!-- Absensi -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-rose-500 px-6 py-4 text-white font-bold flex items-center gap-2">
-                        <i data-lucide="user-check" class="w-5 h-5"></i> KEHADIRAN
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-rose-500 px-8 py-5 text-white font-bold flex items-center gap-3">
+                        <i data-lucide="user-check" class="w-6 h-6"></i> 
+                        <span class="tracking-tight uppercase text-sm">Kehadiran</span>
                     </div>
-                    <div id="grid-absen" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                    <div id="grid-absen" class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <!-- Catatan -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
-                    <div class="flex items-center gap-2 text-slate-700 font-bold border-b pb-4">
-                        <i data-lucide="message-square" class="w-5 h-5"></i> CATATAN WALI KELAS
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 space-y-4">
+                    <div class="flex items-center gap-3 text-slate-800 font-bold border-b border-slate-100 pb-5">
+                        <i data-lucide="message-square" class="w-6 h-6 text-slate-500"></i> 
+                        <span class="tracking-tight uppercase text-sm">Catatan Wali Kelas</span>
                     </div>
-                    <textarea name="catatan" rows="4" placeholder="Tulis catatan..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    <textarea name="catatan" rows="4" placeholder="Tulis catatan perkembangan santri di sini..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-5 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700"></textarea>
                 </div>
 
-                <div class="pb-20">
-                    <button type="submit" class="w-full md:w-auto px-12 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-transform">
-                        <i data-lucide="save" class="w-6 h-6"></i> SIMPAN DATA
+                <div class="pb-24 pt-4">
+                    <button type="submit" class="w-full md:w-auto px-16 py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-xl shadow-indigo-200 flex items-center justify-center gap-4 active:scale-[0.98] transition-all text-lg tracking-wide uppercase">
+                        <i data-lucide="send" class="w-6 h-6"></i> Simpan Nilai
                     </button>
                 </div>
             </form>
@@ -202,11 +244,9 @@
             const desktopToggle = document.getElementById('desktop-toggle');
 
             if (window.innerWidth < 768) {
-                // Mobile behavior
                 sidebar.classList.toggle('-translate-x-full');
                 overlay.classList.toggle('hidden');
             } else {
-                // Desktop behavior
                 sidebar.classList.toggle('sidebar-collapsed');
                 main.classList.toggle('main-expanded');
                 desktopToggle.classList.toggle('hidden', !sidebar.classList.contains('sidebar-collapsed'));
@@ -220,23 +260,23 @@
             const absens = isMI ? absenMI : absenMT;
 
             document.getElementById('grid-akademik').innerHTML = mapels.map(m => `
-                <div class="space-y-1 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase">${m}</label>
-                    <input type="number" name="akad_${m}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-blue-700 outline-none focus:ring-2 focus:ring-blue-400">
+                <div class="group space-y-2 p-5 bg-slate-50 rounded-2xl border border-slate-100 transition-all hover:bg-white hover:shadow-md hover:border-indigo-200">
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block transition-colors group-hover:text-indigo-600">${m}</label>
+                    <input type="number" name="akad_${m}" placeholder="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-extrabold text-indigo-700 outline-none focus:ring-2 focus:ring-indigo-400 text-lg">
                 </div>
             `).join('');
 
             document.getElementById('grid-sikap').innerHTML = sikaps.map(s => `
-                <div class="space-y-1 p-3 bg-amber-50 rounded-xl border border-amber-100">
-                    <label class="text-[10px] font-bold text-amber-700 uppercase">${s}</label>
-                    <input type="text" name="sikap_${s}" placeholder="Predikat..." class="w-full border rounded-lg p-2 font-bold text-amber-700 outline-none focus:ring-2 focus:ring-amber-400">
+                <div class="group space-y-2 p-5 bg-amber-50 rounded-2xl border border-amber-100 transition-all hover:bg-white hover:shadow-md hover:border-amber-200">
+                    <label class="text-[11px] font-bold text-amber-700 uppercase tracking-wider block transition-colors group-hover:text-amber-600">${s}</label>
+                    <input type="text" name="sikap_${s}" placeholder="Predikat..." class="w-full bg-white border border-amber-200 rounded-xl p-3 font-extrabold text-amber-700 outline-none focus:ring-2 focus:ring-amber-400">
                 </div>
             `).join('');
 
             document.getElementById('grid-absen').innerHTML = absens.map(a => `
-                <div class="space-y-1 p-3 bg-rose-50 rounded-xl border border-rose-100">
-                    <label class="text-[10px] font-bold text-rose-700 uppercase">${a}</label>
-                    <input type="number" name="absen_${a}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-rose-600 outline-none focus:ring-2 focus:ring-rose-400">
+                <div class="group space-y-2 p-5 bg-rose-50 rounded-2xl border border-rose-100 transition-all hover:bg-white hover:shadow-md hover:border-rose-200">
+                    <label class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block transition-colors group-hover:text-rose-600">${a}</label>
+                    <input type="number" name="absen_${a}" placeholder="0" class="w-full bg-white border border-rose-200 rounded-xl p-3 font-extrabold text-rose-600 outline-none focus:ring-2 focus:ring-rose-400 text-lg">
                 </div>
             `).join('');
         }
@@ -290,32 +330,32 @@
             e.preventDefault();
             const loading = document.getElementById('loading');
             loading.style.display = 'flex';
-            document.getElementById('loading-text').innerText = "Sedang Mengirim...";
+            document.getElementById('loading-text').innerText = "Sedang Mengirim Data...";
 
             const form = e.target;
             const marhalah = form.marhalah.value;
             const isMI = marhalah === 'mi';
             
-            const payload = [
-                new Date().toLocaleString('id-ID'),
-                form.nama.value,
-                form.nis.value,
-                form.kelas.value,
-                form.semester.value,
-                form.tahun_pelajaran.value,
-                form.wali_kelas.value
-            ];
+            const payload = {
+                marhalah: marhalah,
+                timestamp: new Date().toLocaleString('id-ID'),
+                nama: form.nama.value,
+                nis: form.nis.value,
+                kelas: form.kelas.value,
+                semester: form.semester.value,
+                tahun_pelajaran: form.tahun_pelajaran.value,
+                wali_kelas: form.wali_kelas.value,
+                catatan: form.catatan.value || "-"
+            };
 
             const maps = isMI ? mapelMI : mapelMT;
-            maps.forEach(m => payload.push(form[`akad_${m}`].value || 0));
+            maps.forEach(m => payload[`akad_${m.replace(/[^a-zA-Z0-9]/g, '_')}`] = form[`akad_${m}`].value || 0);
 
             const siks = isMI ? sikapMI : sikapMT;
-            siks.forEach(s => payload.push(form[`sikap_${s}`].value || "-"));
+            siks.forEach(s => payload[`sikap_${s.replace(/[^a-zA-Z0-9]/g, '_')}`] = form[`sikap_${s}`].value || "-");
 
             const abss = isMI ? absenMI : absenMT;
-            abss.forEach(a => payload.push(form[`absen_${a}`].value || 0));
-
-            payload.push(form.catatan.value || "-");
+            abss.forEach(a => payload[`absen_${a.replace(/[^a-zA-Z0-9]/g, '_')}`] = form[`absen_${a}`].value || 0);
 
             try {
                 await fetch(WEB_APP_URL, {
@@ -323,7 +363,7 @@
                     mode: 'no-cors',
                     cache: 'no-cache',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ marhalah, rowData: payload })
+                    body: JSON.stringify(payload)
                 });
                 alert("Alhamdulillah, data berhasil disimpan ke database.");
                 form.reset();
@@ -338,15 +378,23 @@
 
         async function switchTab(tab) {
             currentTab = tab;
-            document.getElementById('side-mi').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mi' ? 'sidebar-item-active' : 'text-gray-600 hover:bg-gray-50'}`;
-            document.getElementById('side-mt').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mt' ? 'sidebar-item-active' : 'text-gray-600 hover:bg-gray-50'}`;
+            const btnMI = document.getElementById('side-mi');
+            const btnMT = document.getElementById('side-mt');
+            
+            if(tab === 'mi') {
+                btnMI.className = "w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium rounded-xl sidebar-item-active transition-all group";
+                btnMT.className = "w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium rounded-xl text-indigo-100/70 sidebar-item-hover transition-all group";
+            } else {
+                btnMT.className = "w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium rounded-xl sidebar-item-active transition-all group";
+                btnMI.className = "w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium rounded-xl text-indigo-100/70 sidebar-item-hover transition-all group";
+            }
+
             document.getElementById('inputMarhalah').value = tab;
-            document.getElementById('current-title').textContent = "Form Input " + (tab === 'mi' ? "Ibtidaiyah" : "Mutawassithoh");
+            document.getElementById('current-title').textContent = "FORM INPUT NILAI RAPOR MARHALAH " + (tab === 'mi' ? "IBTIDAIYAH" : "MUTAWASSITHOH");
             
             renderFields();
             await fetchSantriData();
             
-            // Auto close on mobile after selection
             if (window.innerWidth < 768) toggleSidebar();
         }
 
