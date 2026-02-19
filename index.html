@@ -11,33 +11,76 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .sidebar-item-active { background-color: #eff6ff; color: #2563eb; border-right: 4px solid #2563eb; }
         .loading-overlay { background: rgba(255, 255, 255, 0.8); display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; flex-direction: column; }
+        
+        /* Sidebar transition */
+        #sidebar { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar-collapsed { width: 0 !important; transform: translateX(-100%); overflow: hidden; }
+        .main-expanded { margin-left: 0 !important; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col md:flex-row overflow-hidden">
 
+    <!-- Loading State -->
     <div id="loading" class="loading-overlay">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
         <p id="loading-text" class="text-blue-600 font-semibold text-center">Sedang memproses...</p>
     </div>
 
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-white border-b px-4 py-3 flex justify-between items-center sticky top-0 z-50">
+        <h1 class="font-bold text-blue-600 text-lg flex items-center gap-2">
+            <i data-lucide="graduation-cap" class="w-6 h-6"></i> SIM Rapor
+        </h1>
+        <button onclick="toggleSidebar()" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+
     <!-- Sidebar -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform -translate-x-full md:translate-x-0 md:static flex flex-col h-screen shrink-0">
-        <div class="p-6">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r flex flex-col h-screen shrink-0 shadow-xl md:shadow-none">
+        <div class="p-6 flex items-center justify-between">
             <h1 class="text-2xl font-bold text-blue-600 flex items-center gap-2">
                 <i data-lucide="graduation-cap" class="w-8 h-8"></i> SIM Rapor
             </h1>
+            <button onclick="toggleSidebar()" class="hidden md:block p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg">
+                <i data-lucide="chevron-left"></i>
+            </button>
         </div>
+        
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <div class="pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider pl-2">Navigasi Utama</div>
+            
             <button onclick="switchTab('mi')" id="side-mi" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg sidebar-item-active transition-all">
                 <i data-lucide="book-marked" class="w-5 h-5"></i> Nilai Ibtidaiyah
             </button>
+            
             <button onclick="switchTab('mt')" id="side-mt" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 transition-all">
                 <i data-lucide="book-copy" class="w-5 h-5"></i> Nilai Mutawassithoh
             </button>
+
+            <div class="pt-6 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider pl-2">Eksternal</div>
+            
+            <a href="https://mahad-al-faruq-majenang.github.io/data-santri/" target="_blank" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100">
+                <i data-lucide="users" class="w-5 h-5"></i> Data Santri
+                <i data-lucide="external-link" class="w-4 h-4 ml-auto opacity-50"></i>
+            </a>
         </nav>
+
+        <div class="p-4 border-t bg-slate-50">
+            <p class="text-[10px] text-gray-400 text-center">SIM Rapor v2.1 &copy; 2026</p>
+        </div>
     </aside>
 
-    <main class="flex-1 h-screen overflow-y-auto">
+    <!-- Main Content -->
+    <main id="main-content" class="flex-1 h-screen overflow-y-auto transition-all duration-300">
+        <!-- Desktop Toggle (Hidden when sidebar is visible) -->
+        <button id="desktop-toggle" onclick="toggleSidebar()" class="hidden fixed top-6 left-6 z-40 p-3 bg-white border shadow-md rounded-xl text-blue-600 hover:bg-blue-50 transition-all">
+            <i data-lucide="menu"></i>
+        </button>
+
         <div class="max-w-5xl mx-auto p-4 md:p-10">
             <div class="mb-8">
                 <h2 id="current-title" class="text-3xl font-bold text-slate-800">Form Input Ibtidaiyah</h2>
@@ -131,7 +174,7 @@
                 </div>
 
                 <div class="pb-20">
-                    <button type="submit" class="w-full md:w-auto px-12 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center gap-3">
+                    <button type="submit" class="w-full md:w-auto px-12 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-transform">
                         <i data-lucide="save" class="w-6 h-6"></i> SIMPAN DATA
                     </button>
                 </div>
@@ -152,6 +195,24 @@
         const sikapMT = ["Kebersihan", "Kerapian", "Adab"];
         const absenMT = ["Sakit", "Izin", "Tanpa Keterangan"];
 
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('main-content');
+            const overlay = document.getElementById('sidebar-overlay');
+            const desktopToggle = document.getElementById('desktop-toggle');
+
+            if (window.innerWidth < 768) {
+                // Mobile behavior
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            } else {
+                // Desktop behavior
+                sidebar.classList.toggle('sidebar-collapsed');
+                main.classList.toggle('main-expanded');
+                desktopToggle.classList.toggle('hidden', !sidebar.classList.contains('sidebar-collapsed'));
+            }
+        }
+
         function renderFields() {
             const isMI = currentTab === 'mi';
             const mapels = isMI ? mapelMI : mapelMT;
@@ -161,21 +222,21 @@
             document.getElementById('grid-akademik').innerHTML = mapels.map(m => `
                 <div class="space-y-1 p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <label class="text-[10px] font-bold text-slate-500 uppercase">${m}</label>
-                    <input type="number" name="akad_${m}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-blue-700 outline-none">
+                    <input type="number" name="akad_${m}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-blue-700 outline-none focus:ring-2 focus:ring-blue-400">
                 </div>
             `).join('');
 
             document.getElementById('grid-sikap').innerHTML = sikaps.map(s => `
                 <div class="space-y-1 p-3 bg-amber-50 rounded-xl border border-amber-100">
                     <label class="text-[10px] font-bold text-amber-700 uppercase">${s}</label>
-                    <input type="text" name="sikap_${s}" placeholder="Predikat..." class="w-full border rounded-lg p-2 font-bold text-amber-700 outline-none">
+                    <input type="text" name="sikap_${s}" placeholder="Predikat..." class="w-full border rounded-lg p-2 font-bold text-amber-700 outline-none focus:ring-2 focus:ring-amber-400">
                 </div>
             `).join('');
 
             document.getElementById('grid-absen').innerHTML = absens.map(a => `
                 <div class="space-y-1 p-3 bg-rose-50 rounded-xl border border-rose-100">
                     <label class="text-[10px] font-bold text-rose-700 uppercase">${a}</label>
-                    <input type="number" name="absen_${a}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-rose-600 outline-none">
+                    <input type="number" name="absen_${a}" placeholder="0" class="w-full border rounded-lg p-2 font-bold text-rose-600 outline-none focus:ring-2 focus:ring-rose-400">
                 </div>
             `).join('');
         }
@@ -187,7 +248,11 @@
                 const response = await fetch(`${WEB_APP_URL}?action=getSantriData&marhalah=${currentTab}`);
                 santriData = await response.json();
                 populateDropdowns();
-            } catch (e) { console.error(e); } finally { loading.style.display = 'none'; }
+            } catch (e) { 
+                console.error(e);
+            } finally { 
+                loading.style.display = 'none'; 
+            }
         }
 
         function populateDropdowns() {
@@ -198,12 +263,14 @@
                 wali: document.getElementById('waliKelas')
             };
             Object.values(selects).forEach(s => s.innerHTML = `<option value="">-- Pilih --</option>`);
+            
             const unique = {
                 nama: [...new Set(santriData.map(s => s.nama))].sort(),
                 nis: [...new Set(santriData.map(s => s.nis))].sort(),
                 kelas: [...new Set(santriData.map(s => s.kelas))].sort(),
                 wali: [...new Set(santriData.map(s => s.wali))].sort()
             };
+            
             unique.nama.forEach(v => selects.nama.innerHTML += `<option value="${v}">${v}</option>`);
             unique.nis.forEach(v => selects.nis.innerHTML += `<option value="${v}">${v}</option>`);
             unique.kelas.forEach(v => selects.kelas.innerHTML += `<option value="${v}">${v}</option>`);
@@ -229,15 +296,14 @@
             const marhalah = form.marhalah.value;
             const isMI = marhalah === 'mi';
             
-            // Konstruski Payload Bersih (Urutan diperbarui dengan Semester & Tahun Pelajaran)
             const payload = [
-                new Date().toLocaleString('id-ID'), // [0] Timestamp
-                form.nama.value,                    // [1] Nama
-                form.nis.value,                     // [2] NIS
-                form.kelas.value,                   // [3] Kelas
-                form.semester.value,                // [4] Semester (Baru)
-                form.tahun_pelajaran.value,         // [5] Tahun Pelajaran (Baru)
-                form.wali_kelas.value               // [6] Wali
+                new Date().toLocaleString('id-ID'),
+                form.nama.value,
+                form.nis.value,
+                form.kelas.value,
+                form.semester.value,
+                form.tahun_pelajaran.value,
+                form.wali_kelas.value
             ];
 
             const maps = isMI ? mapelMI : mapelMT;
@@ -257,16 +323,14 @@
                     mode: 'no-cors',
                     cache: 'no-cache',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        marhalah: marhalah, 
-                        rowData: payload 
-                    })
+                    body: JSON.stringify({ marhalah, rowData: payload })
                 });
-                alert("Berhasil disimpan!");
+                alert("Alhamdulillah, data berhasil disimpan ke database.");
                 form.reset();
                 populateDropdowns();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (error) {
-                alert("Error: " + error.message);
+                alert("Terjadi kesalahan: " + error.message);
             } finally {
                 loading.style.display = 'none';
             }
@@ -274,12 +338,16 @@
 
         async function switchTab(tab) {
             currentTab = tab;
-            document.getElementById('side-mi').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mi' ? 'sidebar-item-active' : 'text-gray-600'}`;
-            document.getElementById('side-mt').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mt' ? 'sidebar-item-active' : 'text-gray-600'}`;
+            document.getElementById('side-mi').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mi' ? 'sidebar-item-active' : 'text-gray-600 hover:bg-gray-50'}`;
+            document.getElementById('side-mt').className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all ${tab === 'mt' ? 'sidebar-item-active' : 'text-gray-600 hover:bg-gray-50'}`;
             document.getElementById('inputMarhalah').value = tab;
             document.getElementById('current-title').textContent = "Form Input " + (tab === 'mi' ? "Ibtidaiyah" : "Mutawassithoh");
+            
             renderFields();
             await fetchSantriData();
+            
+            // Auto close on mobile after selection
+            if (window.innerWidth < 768) toggleSidebar();
         }
 
         window.onload = () => {
